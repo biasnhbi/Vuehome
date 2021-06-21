@@ -9,23 +9,30 @@
       <!-- 头像 -->
 
       <!-- 表单区域 -->
-      <el-form :model="loginForm" label-width="0px" class="login_form"> 
+      <!-- PS: model为绑定自定义属性model,ref为给元素设置一个引用对象,rules为元素设置规则-->
+      <el-form :model="loginForm" ref="loginRef" :rules="loginRules" label-width="0px" class="login_form"> 
         <!-- 用户名输入 -->
-        <el-form-item :v-model="username"> <!--lable=左侧提示文本-->
-          <el-input prefix-icon="iconfont icon-user"></el-input><!--prefix-icon设置左侧图标-->
+        <el-form-item prop="username"> <!--lable=左侧提示文本-->
+          <el-input  v-model="loginForm.username" prefix-icon="iconfont icon-user">
+            <!--prefix-icon设置左侧图标-->
+            <!--model设置双向绑定-->
+          </el-input>
         </el-form-item>
         <!-- 用户名输入 -->
 
         <!-- 密码输入 -->
-        <el-form-item :v-model="password"> 
-          <el-input prefix-icon="iconfont icon-3702mima" type="password"></el-input>
+        <el-form-item prop="password"> 
+          <el-input v-model="loginForm.password" prefix-icon="iconfont icon-3702mima" type="password">
+            <!--prefix-icon设置左侧图标-->
+            <!--model设置双向绑定-->
+          </el-input>
         </el-form-item>
         <!-- 密码输入 -->
 
         <!-- 按钮区 -->
         <el-form-item class="btns"> 
           <el-button type="primary">登录</el-button><!--primary=蓝色按钮-->
-          <el-button type="info">重置</el-button><!--info=灰色-->
+          <el-button type="info" @click="loginReset">重置</el-button><!--info=灰色-->
         </el-form-item>
         <!-- 按钮区 -->
       </el-form>
@@ -37,18 +44,42 @@
 export default {
   data() {
     return {
+      //数据绑定对象
       loginForm:{
-        username:"",
-        password:""
+        username:'',//具体数据
+        password:''
+      },
+      loginRules:{
+        username:[
+          {required:true, message:"请输入用户名", trigger:"blur"},
+          {min:3, max:8, message:"长度应在3到8个字符之间", trigger:"blur"}
+          ],
+          password:[
+            {required:true, message:"请输入密码", trigger:"blur"},
+            {min:6, max:12, message:"长度应在6到12个字符之间", trigger:"blur"}
+            ]
+       
       }
     }
   },
+  //函数区域
+  methods: {
+    //重置按钮函数
+    loginReset(){
+      this.$refs.loginRef.resetFields();
+    },
+    login(){
+      this.$refs.loginRef.validate(bool=>{
+        
+      });
+    }
+  }
 }
 </script>
 
-<style lang="less" scope>
+<style lang="less" scoped>
 .login_container {
-  background-color: #2b5b6b;
+  background-color: #072935;
   height: 100%;
 }
 .login_box {
