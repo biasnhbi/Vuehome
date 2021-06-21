@@ -9,16 +9,16 @@
       <!-- 头像 -->
 
       <!-- 表单区域 -->
-      <el-form label-width="0px" class="login_form"> 
+      <el-form :model="loginForm" label-width="0px" class="login_form"> 
         <!-- 用户名输入 -->
-        <el-form-item> <!--lable=左侧提示文本-->
+        <el-form-item :v-model="username"> <!--lable=左侧提示文本-->
           <el-input prefix-icon="iconfont icon-user"></el-input><!--prefix-icon设置左侧图标-->
         </el-form-item>
         <!-- 用户名输入 -->
 
         <!-- 密码输入 -->
-        <el-form-item> 
-          <el-input prefix-icon="iconfont icon-3702mima"></el-input>
+        <el-form-item :v-model="password"> 
+          <el-input prefix-icon="iconfont icon-3702mima" type="password"></el-input>
         </el-form-item>
         <!-- 密码输入 -->
 
@@ -34,7 +34,16 @@
 </template>
 
 <script>
-export default {}
+export default {
+  data() {
+    return {
+      loginForm:{
+        username:"",
+        password:""
+      }
+    }
+  },
+}
 </script>
 
 <style lang="less" scope>
