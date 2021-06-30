@@ -85,7 +85,8 @@
                         placement="right-end">
               <el-button type="warning"
                          icon="el-icon-setting"
-                         size="mini"></el-button>
+                         size="mini"
+                         @click="setRole(take.row)"></el-button>
             </el-tooltip>
 
           </template>
@@ -194,6 +195,30 @@
         <el-button type="primary" @click="editUsersData()">确定</el-button>
       </span>
     </el-dialog>
+
+    <!-- 分配角色对话框 -->
+    <el-dialog title="分配角色"
+    :visible.sync="rightUser"
+    width="50%"
+    @close="addUserClose">
+    <div>
+      <p>当前的用户角色是{{user.username}}</p>
+      <p>当前的用户是{{user.role_name}}</p>
+      <p>分配新角色
+        <el-select v-model="selectRoleId" placeholder="快选择!!!">
+          <el-option v-for="item in userRoleName" :key="item.id" :label="item.roleName" :value="item.id"></el-option>
+        </el-select>
+      </p>
+    </div>
+    <span slot="footer"
+          class="dialog-footer">
+        <el-button type="" 
+        @click="rightUser=false">取消</el-button>
+        <el-button type="primary" @click="saveRole()"
+       >确定</el-button>
+      </span>
+
+    </el-dialog>
   </div>
 </template>
 
@@ -213,9 +238,10 @@ export default {
       },
       userList:[],
       total:0,
-      //控制添加对话框显示
-      addUser:false,
-      editUser:false,
+      //控制对话框显示
+      addUser:false,//添加
+      editUser:false,//编辑
+      rightUser:false,//分配角色
       //表单输入验证规则
       addFormRules:{
         userName:[
@@ -249,7 +275,13 @@ export default {
         mobile:''
       },
       //用户查询
-      editForm:{}
+      editForm:{},
+      //分配权限的用户
+      user:{},
+      //角色列表
+      userRoleName:[],
+      //分配角色绑定
+      selectRoleId:''
     }
   },
   methods: {
@@ -284,6 +316,8 @@ export default {
     },
     // 监听关闭提示框事件(该事件内容为重置表单)
     addUserClose(){
+      this.selectRoleId=''
+      this.user={}
       this.$refs.addFormRef.resetFields()
     },
     //添加用户信息上传数据库事件
@@ -353,6 +387,30 @@ export default {
         this.$message.success('删除用户成功')
         this.getUserData()
     },
+    //展示分配角色对话框
+    async setRole(user){
+      this.rightUser=true
+      const {data:res}=await this.$http.get("roles")
+      if (res.meta.status!==200) {
+        return this.$message.error('获取角色列表失败')
+      }
+      this.userRoleName=res.data
+      this.user=user
+    },
+    async saveRole(){
+      if (!this.selectRoleId) {
+        return this.$message.error("请选择角色再确定")
+      }
+      const{data:res}=await this.$http.put(`users/${this.user.id}/role`,{
+        rid:this.selectRoleId
+      })
+      if (res.meta.status!==200) {
+        return this.$message.error("修改用户角色失败")
+      }
+      this.getUserData()
+      this.rightUser=false
+      return this.$message.success("修改用户角色角色")
+    }
   },
 }
 </script>
