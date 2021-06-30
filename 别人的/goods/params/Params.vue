@@ -330,6 +330,7 @@ export default {
       }
       return null
     },
+    //动态计算标题文本
     titleText() {
       if (this.activeName === 'many') {
         return '动态参数'
