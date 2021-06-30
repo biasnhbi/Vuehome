@@ -119,7 +119,7 @@
 
         <el-form-item label="用户名"
                       prop="username">
-          <el-input v-model="addForm.userName" clearable prefix-icon="el-icon-s-custom"></el-input>
+          <el-input v-model="addForm.username" clearable prefix-icon="el-icon-s-custom"></el-input>
         </el-form-item>
 
         <el-form-item label="密码"
@@ -368,16 +368,18 @@ export default {
     },
     //删除用户
     async deleteUser(id){
-      await this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
+      const result= await this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'
-        }).catch(() => {
-          this.$message({
+        }).catch(err => {
+          return this.$message({
             type: 'info',
             message: '已取消删除'
           });
         });
+        //确定删除就执行删除
+        if(result=='confirm'){
         const {data:res}=await this.$http.delete("users/"+id)
         console.log(res);
         if (res.meta.status !== 200) {
@@ -385,7 +387,7 @@ export default {
           return
         }
         this.$message.success('删除用户成功')
-        this.getUserData()
+        this.getUserData()}
     },
     //展示分配角色对话框
     async setRole(user){
