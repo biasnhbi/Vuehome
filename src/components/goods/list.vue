@@ -11,7 +11,7 @@
       <!-- 按钮搜索/添加区域 -->
       <el-row :gutter="20">
         <el-col :span="7">
-          <el-input placeholder="请输入内容" @clear="getGoofsList" clearable v-model="queryInfo.query">
+          <el-input placeholder="请输入内容"  clearable @clear="getGoofsList" v-model="queryInfo.query">
             <el-button slot="append" icon="el-icon-search" @click="getGoofsList"></el-button>
           </el-input>
         </el-col>
@@ -44,6 +44,7 @@
           </el-table-column>
         </el-table>
       </el-row>
+      <!-- 分页区域 -->
       <el-pagination
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange"
@@ -117,6 +118,14 @@ export default {
       this.$message.success('删除成功!')
       this.getGoofsList()
     },
+    goAddpage() {
+      this.$router.push('goods/add')
+    },
+    goEditpage(id) {
+      // console.log(id);
+      window.sessionStorage.setItem("edit",id)
+      this.$router.push({name:'edit', params:{goods_id:id}})
+    }
   },
 }
 </script>

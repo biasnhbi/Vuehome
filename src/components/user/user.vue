@@ -244,7 +244,7 @@ export default {
       rightUser:false,//分配角色
       //表单输入验证规则
       addFormRules:{
-        userName:[
+        username:[
           {required:true, message:"请输入用户名", trigger:"blur"},
           {min:3, max:8, message:"长度应在3到8个字符之间", trigger:"blur"},
         ],
@@ -324,7 +324,7 @@ export default {
     addUsers(){
       this.$refs.addFormRef.validate(async value=>{
         if (!value) {
-          this.$message.error('请输入信息')
+          this.$message.error('请输入正确的信息')
           return
         }
         const {data:res}=await this.$http.post('users',this.addForm)

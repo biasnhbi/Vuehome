@@ -20,3 +20,13 @@ html,body,#app{
 .el-cascader-panel {
     height: 200px;
   }
+  /* .el-cascader-menu {
+  height: 300px;
+} */
+/* .el-cascader-menu__wrap,
+.el-scrollbar__wrap {
+  height: 290px !important;
+} */
+.ql-editor {
+  min-height: 500px;
+}
